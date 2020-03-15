@@ -1,9 +1,14 @@
 package com.adambates.wikisearch.search.querying;
 
+import com.adambates.wikisearch.search.DocumentFieldName;
 import com.adambates.wikisearch.search.querying.factories.IndexReaderFactory;
 import com.adambates.wikisearch.search.querying.factories.IndexSearcherFactory;
+import com.adambates.wikisearch.search.querying.models.SearchResult;
 import com.adambates.wikisearch.search.querying.models.SearchResults;
 import com.adambates.wikisearch.search.querying.models.TermResults;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -38,7 +43,11 @@ class IndexReaderServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         when(indexReaderFactory.createIndexReader()).thenReturn(indexReader);
-        when(indexSearcherFactory.createIndexSearcher(indexReader)).thenReturn(indexSearcher);
+        when(indexSearcherFactory.createIndexSearcher(indexReader)).then(invocationOnMock -> {
+            // Fix closing NPE because .close() is final (not mockable)
+            ReflectionTestUtils.setField(indexReader, "closed", true);
+            return indexSearcher;
+        });
         when(indexReader.getSumTotalTermFreq(anyString())).then(invocationOnMock -> {
             // Fix closing NPE because .close() is final (not mockable)
             ReflectionTestUtils.setField(indexReader, "closed", true);
@@ -61,6 +70,27 @@ class IndexReaderServiceTest {
         verify(indexSearcherFactory).createIndexSearcher(indexReader);
 
         verify(indexSearcher).search(query, RESULTS);
+    }
+
+    @Test
+    void getSearchResultById() throws Exception {
+        final int id = 123;
+
+        final Document document = new Document();
+        document.add(new TextField(DocumentFieldName.PAGE_ID.getValue(), "1234", Field.Store.YES));
+        document.add(new TextField(DocumentFieldName.NAME.getValue(), "name", Field.Store.YES));
+        document.add(new TextField(DocumentFieldName.CONTENT.getValue(), "content", Field.Store.YES));
+
+        when(indexSearcher.doc(id)).thenReturn(document);
+
+        assertThat(indexReaderService.getSearchResultById(id)).isEqualTo(SearchResult.builder()
+                .id(id)
+                .score(1f)
+                .wikiPageLink(WIKI_PAGE_BASE_LINK + "name")
+                .wikiPageId(1234)
+                .title("name")
+                .content("content")
+                .build());
     }
 
     @Test
