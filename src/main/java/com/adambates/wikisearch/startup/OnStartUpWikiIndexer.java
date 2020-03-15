@@ -31,5 +31,22 @@ class OnStartUpWikiIndexer {
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         final List<LoadedWikiPage> loadedWikiPages = wikiService.loadNRandomWikiPages(pagesToLoad);
         indexWriterService.writeLoadedWikiPagesToIndex(loadedWikiPages);
+
+        log.info("\n\n" +
+                "****************************************\n" +
+                "***                                  ***\n" +
+                "***      Adam Bates' WikiSearch      ***\n" +
+                "***                                  ***\n" +
+                "****************************************\n" +
+                "\n" +
+                "Welcome! I've downloaded and indexed {} wiki pages to be searched using the exposed API.\n" +
+                "\n" +
+                "Wiki Pages URI: http://localhost:8080/wiki/pages\n" +
+                "Wiki Terms URI: http://localhost:8080/wiki/terms\n" +
+                "\n" +
+                "For more information on how to use the APIs see the project-level README.md file,\n" +
+                "or head on over to the GitHub repo: https://github.com/adam-bates/wikisearch\n\n",
+                loadedWikiPages.size()
+        );
     }
 }

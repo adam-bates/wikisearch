@@ -1,25 +1,33 @@
 package com.adambates.wikisearch.search;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
-@AllArgsConstructor
-public enum DocumentFieldName {
-    PAGE_ID("pageId"),
-    NAME("name"),
-    CONTENT("content"),
-    ;
+public final class DocumentFieldName {
+
+    private static final Map<String, DocumentFieldName> VALUE_MAP = new HashMap<>();
+
+    public static DocumentFieldName
+            PAGE_ID = new DocumentFieldName("pageId"),
+            NAME = new DocumentFieldName("name"),
+            CONTENT = new DocumentFieldName("content");
 
     private final String value;
 
+    private DocumentFieldName(final String value) {
+        this.value = value;
+        VALUE_MAP.put(value, this);
+    }
+
     public static DocumentFieldName fromValue(final String value) {
-        return Arrays.stream(values())
-                .filter(documentFieldName -> StringUtils.equalsIgnoreCase(documentFieldName.value, value))
-                .findAny()
-                .orElse(null);
+        return VALUE_MAP.get(value.toLowerCase());
+    }
+
+    public static Set<String> acceptedValues() {
+        return VALUE_MAP.keySet();
     }
 }
