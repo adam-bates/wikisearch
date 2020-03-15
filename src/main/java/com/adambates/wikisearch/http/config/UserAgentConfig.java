@@ -1,4 +1,4 @@
-package com.adambates.wikisearch.config;
+package com.adambates.wikisearch.http.config;
 
 import com.adambates.wikisearch.http.models.UserAgent;
 import org.springframework.beans.factory.annotation.Value;

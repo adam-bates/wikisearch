@@ -1,5 +1,6 @@
-package com.adambates.wikisearch.config;
+package com.adambates.wikisearch.http.config;
 
+import com.adambates.wikisearch.http.config.UserAgentConfig;
 import org.junit.jupiter.api.Test;
 
 import static com.adambates.wikisearch.TestObjectFactory.CONTACT_EMAIL;

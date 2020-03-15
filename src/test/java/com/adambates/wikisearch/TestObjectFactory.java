@@ -1,6 +1,6 @@
 package com.adambates.wikisearch;
 
-import com.adambates.wikisearch.config.UserAgentConfig;
+import com.adambates.wikisearch.http.config.UserAgentConfig;
 import com.adambates.wikisearch.http.models.UserAgent;
 import lombok.experimental.UtilityClass;
 
