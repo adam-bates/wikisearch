@@ -126,6 +126,46 @@ Example Response:
 }
 ```
 
+#### Wiki Page
+```
+GET /wiki/pages/{id}
+```
+##### Description
+Returns the wiki page specified by the id.
+
+##### Path Variables
+| Variable | Type | Description |
+|:----- |:-----|:--------
+| id | integer | ID of the expected wiki page result.
+
+##### Response
+
+```
+{
+  id: integer,
+  score: float,
+  wikiPageId: integer,
+  wikiPageLink: string,
+  title: string,
+  content: string
+}
+```
+
+```
+Example Request: GET http://localhost:8080/wiki/pages/4
+```
+```
+Example Response:
+{
+  id: 4,
+  score: 1,
+  wikiPageId: 111111,
+  wikiPageLink: "https://en.wikipedia.org/wiki/Example_Page_1",
+  title: "Example Page 1,
+  content: "Some example page content."
+}
+```
+
 #### Wiki Terms
 ```
 GET /wiki/terms
