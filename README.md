@@ -11,6 +11,7 @@
 - [How to use](#how-to-use)
     - [API Definition](#api-definition)
         - [Wiki Pages](#wiki-pages)
+        - [Wiki Page](#wiki-page)
         - [Wiki Terms](#wiki-terms)
 - [How it works](#how-it-works)
 
@@ -24,7 +25,7 @@ This application will start up a server when run locally, pull 10 random pages f
 
 #### Requirements
 
-- [JDK SE 1.8 (Higher should be fine but has not been tested)](https://www.oracle.com/java/technologies/javase-jdk8-downloads.html)
+- [JDK SE 1.8](https://www.oracle.com/java/technologies/javase-jdk8-downloads.html) (Higher should be fine but has not been tested)
 - [Maven](https://maven.apache.org/install.html) (or simply `brew install maven`)
 - [Git](https://git-scm.com/downloads)
 
@@ -99,7 +100,7 @@ Returns the list of wiki pages including the search score from the query.
 ```
 
 ```
-Example Request: GET http://localhost:8080/wiki/pages?query=funny&limit=2
+Example Request: GET /wiki/pages?query=funny&limit=2
 ```
 ```
 Example Response:
@@ -152,7 +153,7 @@ Returns the wiki page specified by the id.
 ```
 
 ```
-Example Request: GET http://localhost:8080/wiki/pages/4
+Example Request: GET /wiki/pages/4
 ```
 ```
 Example Response:
@@ -218,7 +219,7 @@ Example Response:
 
 ## How it works
 
-The application starts a local server (Usually at [http://localhost:8080](http://localhost:8080)) using [Java's Spring](https://spring.io/), and was bootstrapped using [Spring Boot](https://spring.io/projects/spring-boot). 
+The application starts a local server (Most likely at [http://localhost:8080](http://localhost:8080)) using [Java's Spring](https://spring.io/), and was bootstrapped using [Spring Boot](https://spring.io/projects/spring-boot). 
 
 On startup of the server, [MediWiki's API](https://www.mediawiki.org/wiki/API:Main_page) is used to pull 10 random pages from Wikipedia and extract their content. It then uses [Apache's Lucene](https://lucene.apache.org/) to index and store the content of the pages with the title and page ID.
 
