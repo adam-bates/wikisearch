@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,19 +25,18 @@ class IndexWriterServiceImpl implements IndexWriterService {
 
     @Override
     public void writeLoadedWikiPagesToIndex(final List<LoadedWikiPage> loadedWikiPages) {
-        final List<Document> documents = loadedWikiPages.stream()
-                .map(IndexWriterServiceImpl::buildDocument)
-                .collect(Collectors.toList());
-
-        writeDocumentsToIndex(documents);
-    }
-
-    private void writeDocumentsToIndex(final List<Document> documents) {
         try (final IndexWriter writer = indexWriterFactory.createIndexWriter()) {
-            writer.addDocuments(documents);
+            writeLoadedWikiPagesToIndex(writer, loadedWikiPages);
         } catch (final IOException e) {
             log.error("Unable to write documents to index: ", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    private void writeLoadedWikiPagesToIndex(final IndexWriter writer,
+                                             final List<LoadedWikiPage> loadedWikiPages) throws IOException {
+        for (final LoadedWikiPage loadedWikiPage : loadedWikiPages) {
+            writer.addDocument(buildDocument(loadedWikiPage));
         }
     }
 
