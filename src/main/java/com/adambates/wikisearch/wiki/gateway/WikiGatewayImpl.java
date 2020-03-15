@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Gateway to Wiki API. This class is responsible for making requests to the wiki api and parsing the response.
@@ -47,8 +48,9 @@ class WikiGatewayImpl implements WikiGateway {
 
         // Get JsonArray of wiki pages from API response
         final JsonArray jsonArrayOfPages = getJsonResponseBody(responseSpec)
-                .getAsJsonObject(JSON_OBJECT_FIELD_QUERY)
-                .getAsJsonArray(JSON_ARRAY_FIELD_RANDOM);
+                .map(jsonObject -> jsonObject.getAsJsonObject(JSON_OBJECT_FIELD_QUERY))
+                .map(jsonObject -> jsonObject.getAsJsonArray(JSON_ARRAY_FIELD_RANDOM))
+                .orElseGet(JsonArray::new);
 
         // Convert JsonArray to List<WikiPages> and return
         return JsonUtils.buildListFromJsonArray(jsonArrayOfPages,
@@ -63,8 +65,9 @@ class WikiGatewayImpl implements WikiGateway {
 
         // Get JsonArray of wiki pages from API response
         final JsonArray jsonArrayOfPages = getJsonResponseBody(responseSpec)
-                .getAsJsonObject(JSON_OBJECT_FIELD_QUERY)
-                .getAsJsonArray(JSON_ARRAY_FIELD_PAGES);
+                .map(jsonObject -> jsonObject.getAsJsonObject(JSON_OBJECT_FIELD_QUERY))
+                .map(jsonObject -> jsonObject.getAsJsonArray(JSON_ARRAY_FIELD_PAGES))
+                .orElseGet(JsonArray::new);
 
         // Convert JsonArray to List<LoadedWikiPage>
         final List<LoadedWikiPage> loadedWikiPages = JsonUtils.buildListFromJsonArray(jsonArrayOfPages, loadedWikiPage -> {
@@ -110,9 +113,9 @@ class WikiGatewayImpl implements WikiGateway {
                         .build());
     }
 
-    private JsonObject getJsonResponseBody(final WebClient.ResponseSpec responseSpec) {
+    private Optional<JsonObject> getJsonResponseBody(final WebClient.ResponseSpec responseSpec) {
         final String response = responseSpec.bodyToMono(String.class).block();
-        return gson.fromJson(response, JsonObject.class);
+        return Optional.of(gson.fromJson(response, JsonObject.class));
     }
 
 
