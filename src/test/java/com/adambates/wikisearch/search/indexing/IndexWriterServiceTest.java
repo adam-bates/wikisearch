@@ -3,6 +3,7 @@ package com.adambates.wikisearch.search.indexing;
 import com.adambates.wikisearch.search.indexing.factories.IndexWriterFactory;
 import com.adambates.wikisearch.wiki.models.LoadedWikiPage;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +11,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,7 +34,7 @@ class IndexWriterServiceTest {
         indexWriterService.writeLoadedWikiPagesToIndex(loadedWikiPages);
 
         verify(indexWriterFactory).createIndexWriter();
-        verify(indexWriter).addDocuments(anyList());
+        verify(indexWriter, times(loadedWikiPages.size())).addDocument(any(Document.class));
         verify(indexWriter).close();
     }
 
