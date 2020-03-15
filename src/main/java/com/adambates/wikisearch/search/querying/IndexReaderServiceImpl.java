@@ -64,8 +64,6 @@ class IndexReaderServiceImpl implements IndexReaderService {
     }
 
     private SearchResults getSearchResultsForQuery(final IndexReader indexReader, final Query query, final int n) throws IOException {
-        final long totalTermsIndexed = indexReader.getSumTotalTermFreq(DocumentFieldName.CONTENT.getValue());
-
         final IndexSearcher indexSearcher = indexSearcherFactory.createIndexSearcher(indexReader);
         final TopDocs topDocs = indexSearcher.search(query, n);
         final List<SearchResult> searchResults = Arrays.stream(topDocs.scoreDocs)
@@ -96,7 +94,7 @@ class IndexReaderServiceImpl implements IndexReaderService {
                 .collect(Collectors.toList());
 
         return SearchResults.builder()
-                .totalTermsIndexed(totalTermsIndexed)
+                .pagesReturned(searchResults.size())
                 .pages(searchResults)
                 .build();
     }

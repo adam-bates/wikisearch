@@ -53,7 +53,7 @@ class IndexReaderServiceTest {
         when(indexSearcher.search(query, RESULTS)).thenReturn(topDocs);
 
         assertThat(indexReaderService.getNSearchResultsForQuery(query, RESULTS)).isEqualTo(SearchResults.builder()
-                .totalTermsIndexed(0)
+                .pagesReturned(0)
                 .pages(new ArrayList<>())
                 .build());
 

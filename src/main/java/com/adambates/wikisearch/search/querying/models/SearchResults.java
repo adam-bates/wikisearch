@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 @Builder
 public class SearchResults {
-    private final long totalTermsIndexed;
+    private final int pagesReturned;
     private final List<SearchResult> pages;
 }
