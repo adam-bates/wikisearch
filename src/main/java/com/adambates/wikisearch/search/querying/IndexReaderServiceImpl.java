@@ -144,6 +144,10 @@ class IndexReaderServiceImpl implements IndexReaderService {
     }
 
     private static List<TermResult> getContentTermResults(final IndexReader indexReader, final int n) {
+        if (n <= 0) {
+            return Collections.emptyList();
+        }
+
         try {
             final TermStats[] stats = HighFreqTerms.getHighFreqTerms(
                     indexReader, n, DocumentFieldName.CONTENT.getValue(), new HighFreqTerms.DocFreqComparator());

@@ -18,6 +18,7 @@
 	<description>Adam Bates' WikiSearch Application</description>
 
 	<properties>
+		<start-class>com.adambates.wikisearch.WikiSearchApplication</start-class>
 		<java.version>1.8</java.version>
 	</properties>
 

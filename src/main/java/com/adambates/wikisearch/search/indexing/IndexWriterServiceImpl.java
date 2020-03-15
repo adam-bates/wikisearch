@@ -10,7 +10,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.memory.MemoryIndex;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,7 +35,6 @@ class IndexWriterServiceImpl implements IndexWriterService {
 
     private void writeDocumentsToIndex(final List<Document> documents) {
         try (final IndexWriter writer = indexWriterFactory.createIndexWriter()) {
-            documents.forEach(document -> MemoryIndex.fromDocument(document, analyzer));
             writer.addDocuments(documents);
         } catch (final IOException e) {
             log.error("Unable to write documents to index: ", e);
