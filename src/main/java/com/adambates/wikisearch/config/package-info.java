@@ -1,0 +1,1 @@
+package com.adambates.wikisearch.config;
