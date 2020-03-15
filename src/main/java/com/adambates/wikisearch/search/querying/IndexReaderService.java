@@ -1,9 +1,11 @@
 package com.adambates.wikisearch.search.querying;
 
+import com.adambates.wikisearch.search.querying.models.SearchResults;
+import com.adambates.wikisearch.search.querying.models.TermResults;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TopDocs;
 
 public interface IndexReaderService {
 
-    TopDocs getTopDocsForQuery(Query query, int n);
+    SearchResults getNSearchResultsForQuery(Query query, int n);
+    TermResults getNTermResults(int n);
 }

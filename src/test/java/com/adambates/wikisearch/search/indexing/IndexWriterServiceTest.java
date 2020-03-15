@@ -2,6 +2,7 @@ package com.adambates.wikisearch.search.indexing;
 
 import com.adambates.wikisearch.search.indexing.factories.IndexWriterFactory;
 import com.adambates.wikisearch.wiki.models.LoadedWikiPage;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,8 @@ import static org.mockito.Mockito.when;
 class IndexWriterServiceTest {
 
     private final IndexWriterFactory indexWriterFactory = mock(IndexWriterFactory.class);
-    private final IndexWriterService indexWriterService = new IndexWriterServiceImpl(indexWriterFactory);
+    private final Analyzer analyzer = mock(Analyzer.class);
+    private final IndexWriterService indexWriterService = new IndexWriterServiceImpl(indexWriterFactory, analyzer);
 
     @Test
     void writeLoadedWikiPagesToIndex() throws IOException {
