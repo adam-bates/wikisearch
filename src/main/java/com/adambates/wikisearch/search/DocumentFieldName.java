@@ -12,7 +12,7 @@ public final class DocumentFieldName {
     private static final Map<String, DocumentFieldName> VALUE_MAP = new HashMap<>();
 
     public static DocumentFieldName
-            PAGE_ID = new DocumentFieldName("pageId"),
+            PAGE_ID = new DocumentFieldName("id"),
             NAME = new DocumentFieldName("name"),
             CONTENT = new DocumentFieldName("content");
 
@@ -20,14 +20,18 @@ public final class DocumentFieldName {
 
     private DocumentFieldName(final String value) {
         this.value = value;
-        VALUE_MAP.put(value, this);
+        VALUE_MAP.put(normalizedValue(value), this);
     }
 
     public static DocumentFieldName fromValue(final String value) {
-        return VALUE_MAP.get(value.toLowerCase());
+        return VALUE_MAP.get(normalizedValue(value));
     }
 
     public static Set<String> acceptedValues() {
         return VALUE_MAP.keySet();
+    }
+
+    private static String normalizedValue(final String value) {
+        return value.toLowerCase();
     }
 }
